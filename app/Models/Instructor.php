@@ -2,22 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Instructor extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    use HasFactory,HasApiTokens;
     protected $fillable = [
         'First_name',
         'Last_name',
@@ -28,7 +19,7 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return $this->belongsToMany('App\Models\Course','course_student');
+        return $this->hasMany('App\Models\Course');
     }
 
     /**

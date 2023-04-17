@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\API\RegisterController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,14 +24,32 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // Route::post('register', RegisterController::class);
-Route::post('register', [RegisterController::class, 'register']);
-Route::post('login', [RegisterController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
+Route::post('password', [AuthController::class, 'Password']);
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('logout', [RegisterController::class, 'logout']);
+
+    Route::get('get-courses', [MainController::class, 'getCourses']);
+    Route::post('enrollment', [MainController::class, 'createCourseStudent']); 
+    Route::get('get-enrollment', [MainController::class, 'getCourseStudent']); 
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
+Route::post('register-instractor', [AuthController::class, 'registerInstractor']);
+Route::post('login-instractor', [AuthController::class, 'loginInstractor']);
+
+Route::middleware('auth:sanctum','abilities:instractors')->group(function() {
+    Route::post('create-course', [MainController::class, 'createCourse']);
+    
+    Route::post('update-course/{id}', [MainController::class, 'update']);
+    Route::get('show-course/{id}', [MainController::class, 'showCourseById']);
+    Route::get('get-All-courses', [MainController::class, 'getCoursesInstractour']);   
+    Route::post('delete/{id}', [MainController::class, 'delete']);
+    Route::post('logout-instructor', [AuthController::class, 'logoutInstructor']);  
+});
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
